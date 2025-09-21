@@ -36,8 +36,8 @@ public class UserMealsUtil {
         }
         for (UserMeal meal : meals) {
             LocalTime time = meal.getDateTime().toLocalTime();
-            boolean excess = caloriesPerDay < calories.get(meal.getDateTime().toLocalDate());
             if (!time.isBefore(startTime) && time.isBefore(endTime)) {
+                boolean excess = caloriesPerDay < calories.get(meal.getDateTime().toLocalDate());
                 UserMealWithExcess userMealWithExcess = new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
                 result.add(userMealWithExcess);
             }
