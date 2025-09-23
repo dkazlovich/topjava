@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class UserMealsUtil {
@@ -48,9 +49,9 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> calories = meals.stream()
                 .collect(Collectors.toMap(userMeal -> userMeal.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
+        Predicate<UserMeal> isIncluded = userMeal -> startTime.isBefore(userMeal.getDateTime().toLocalTime()) && endTime.isAfter(userMeal.getDateTime().toLocalTime());
         return meals.stream()
-                .filter(userMeal -> startTime.isBefore(userMeal.getDateTime().toLocalTime()))
-                .filter(userMeal -> endTime.isAfter(userMeal.getDateTime().toLocalTime()))
+                .filter(isIncluded)
                 .map(userMeal -> mapToUserMealWithExcess(userMeal, caloriesPerDay < calories.get(userMeal.getDateTime().toLocalDate())))
                 .collect(Collectors.toList());
     }
