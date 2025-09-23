@@ -38,7 +38,7 @@ public class UserMealsUtil {
             LocalTime time = meal.getDateTime().toLocalTime();
             if (!time.isBefore(startTime) && time.isBefore(endTime)) {
                 boolean excess = caloriesPerDay < calories.get(meal.getDateTime().toLocalDate());
-                UserMealWithExcess userMealWithExcess = new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+                UserMealWithExcess userMealWithExcess = mapToUserMealWithExcess(meal, excess);
                 result.add(userMealWithExcess);
             }
         }
@@ -51,8 +51,11 @@ public class UserMealsUtil {
         ));
         return meals.stream().filter(userMeal -> startTime.isBefore(userMeal.getDateTime().toLocalTime()))
                 .filter(userMeal -> endTime.isAfter(userMeal.getDateTime().toLocalTime()))
-                .map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(), userMeal.getDescription(),
-                        userMeal.getCalories(), caloriesPerDay < calories.get(userMeal.getDateTime().toLocalDate())))
+                .map(userMeal -> mapToUserMealWithExcess(userMeal, caloriesPerDay < calories.get(userMeal.getDateTime().toLocalDate())))
                 .collect(Collectors.toList());
+    }
+
+    private static UserMealWithExcess mapToUserMealWithExcess(UserMeal userMeal, boolean excess) {
+        return new UserMealWithExcess(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), excess);
     }
 }
