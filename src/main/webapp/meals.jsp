@@ -31,6 +31,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<a href="meal.jsp">Add meal</a>
 <table>
     <thead>
     <tr>
@@ -45,6 +46,8 @@
             <td>${fn:replace(meal.dateTime, 'T', ' ')}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td><a href="">Update</a></td>
+            <td><a href="">Delete</a></td>
         </tr>
     </c:forEach>
     </tbody>
