@@ -22,6 +22,6 @@ public class MealRepository {
         return meals;
     }
     public void deleteMeal(UUID uuid) {
-        meals.removeIf(meal -> meal.getUuid().equals(uuid));
+
     }
 }
