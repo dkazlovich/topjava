@@ -30,8 +30,9 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action != null && action.equalsIgnoreCase("delete")) {
-            UUID uuid = UUID.fromString(request.getParameter("uuid"));
+            UUID uuid = UUID.fromString(request.getParameter("id"));
             mealRepository.deleteMeal(uuid);
+            mealsTo = filteredByStreams(mealRepository.getMeals(), LocalTime.of(0, 0), LocalTime.of(23, 59,59, 999999999), 2000);
         }
         request.setAttribute("mealsTo", mealsTo);
         log.debug("forward to meals");
