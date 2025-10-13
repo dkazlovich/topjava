@@ -28,20 +28,42 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
+        String path = "/meals.jsp";
         if (action != null && action.equalsIgnoreCase("delete")) {
             UUID uuid = UUID.fromString(request.getParameter("id"));
             mealRepository.deleteMeal(uuid);
             mealsTo = filteredByStreams(mealRepository.getMeals(), LocalTime.of(0, 0), LocalTime.of(23, 59,59, 999999999), 2000);
         }
+        if (action != null && action.equalsIgnoreCase("update")) {
+            UUID uuid = UUID.fromString(request.getParameter("id"));
+            Meal meal = mealRepository.getMealById(uuid);
+            request.setAttribute("meal", meal);
+            path = "meal.jsp";
+        }
         request.setAttribute("mealsTo", mealsTo);
         log.debug("forward to meals");
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        request.getRequestDispatcher(path).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        if (action != null && action.equalsIgnoreCase("createMeal")) {
+            mealRepository.addMeal(LocalDateTime.parse(request.getParameter("dateTime")),request.getParameter("description"),Integer.parseInt(request.getParameter("calories")));
+            mealsTo = filteredByStreams(mealRepository.getMeals(), LocalTime.of(0, 0), LocalTime.of(23, 59,59, 999999999), 2000);
+        }
+        if (action != null && action.equalsIgnoreCase("updateMeal")) {
+            mealRepository.updateMeal(UUID.fromString(request.getParameter("id")), LocalDateTime.parse(request.getParameter("dateTime")),request.getParameter("description"),Integer.parseInt(request.getParameter("calories")));
+            mealsTo = filteredByStreams(mealRepository.getMeals(), LocalTime.of(0, 0), LocalTime.of(23, 59,59, 999999999), 2000);
+        }
+        request.setAttribute("mealsTo", mealsTo);
+        String path = "/meals.jsp";
+        request.getRequestDispatcher(path).forward(request, response);
 
     }
 }

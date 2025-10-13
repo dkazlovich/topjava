@@ -6,11 +6,23 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public class Meal {
-    private final LocalDateTime dateTime;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-    private final String description;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    private final int calories;
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    private LocalDateTime dateTime;
+
+    private String description;
+
+    private int calories;
 
     public UUID getId() {
         return id;

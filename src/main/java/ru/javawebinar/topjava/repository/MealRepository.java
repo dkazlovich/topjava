@@ -23,8 +23,21 @@ public class MealRepository {
     public List<Meal> getMeals() {
         return meals;
     }
+    public Meal getMealById(UUID id) {
+        return meals.stream().filter(m -> m.getId().equals(id)).findFirst().orElse(null);
+    }
     public void deleteMeal(UUID id) {
         meals.removeIf(m -> m.getId().equals(id));
     }
 
+    public void updateMeal(UUID id, LocalDateTime dateTime, String description, int calories) {
+        Meal meal = meals.stream().filter(m -> m.getId().equals(id)).findFirst().orElse(null);
+        meal.setDateTime(dateTime);
+        meal.setDescription(description);
+        meal.setCalories(calories);
+    }
+
+    public void addMeal(LocalDateTime dateTime, String description, int calories) {
+        meals.add(new Meal(dateTime, description, calories));
+    }
 }
