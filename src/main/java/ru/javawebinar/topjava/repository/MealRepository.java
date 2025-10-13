@@ -37,7 +37,11 @@ public class MealRepository {
         meal.setCalories(calories);
     }
 
-    public void addMeal(LocalDateTime dateTime, String description, int calories) {
-        meals.add(new Meal(dateTime, description, calories));
+    public Meal addMeal(LocalDateTime dateTime, String description, int calories) {
+        Meal meal = new Meal(dateTime, description, calories);
+        meals.add(meal);
+        return meal;
     }
+
+    
 }
