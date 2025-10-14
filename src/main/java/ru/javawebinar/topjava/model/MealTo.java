@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class MealTo {
+    private final UUID id;
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -15,8 +17,6 @@ public class MealTo {
     public UUID getId() {
         return id;
     }
-
-    private final UUID id;
 
     public LocalDateTime getDateTime() {
         return dateTime;
@@ -34,7 +34,7 @@ public class MealTo {
         return excess;
     }
 
-    public MealTo(LocalDateTime dateTime, String description, int calories, boolean excess, UUID id) {
+    public MealTo(UUID id, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
