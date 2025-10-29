@@ -1,9 +1,58 @@
 package ru.javawebinar.topjava.service;
 
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.web.SecurityUtil;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class MealService {
 
-    private MealRepository repository;
+    private final MealRepository repository;
 
+    public MealService(MealRepository repository) {
+        this.repository = repository;
+    }
+
+    public Meal create(Meal meal) {
+        meal.setUserId(SecurityUtil.authUserId());
+        return repository.save(meal);
+    }
+
+    public Meal update(Meal meal) {
+        if (meal.getUserId() == SecurityUtil.authUserId()) {
+            return repository.save(meal);
+        }
+        return null;
+    }
+
+    public boolean delete(int id) {
+        Meal meal = repository.get(id);
+        if (meal.getUserId() == SecurityUtil.authUserId()) {
+            return repository.delete(id);
+        }
+        return false;
+    }
+
+    public Meal get(int id) {
+        Meal meal = repository.get(id);
+        if (meal.getUserId() == SecurityUtil.authUserId()) {
+            return meal;
+        }
+        return null;
+    }
+
+    public Collection<Meal> getByDates(LocalDate start, LocalDate end) {
+        return repository.getByDates(start, end).stream()
+                .filter(meal -> meal.getUserId().equals(SecurityUtil.authUserId()))
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Meal> getAll() {
+        return repository.getAll().stream()
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .collect(Collectors.toList());
+    }
 }
