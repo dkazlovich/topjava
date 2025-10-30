@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.service;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
@@ -41,7 +42,11 @@ public class MealService {
     }
 
     private static boolean isAuthUser(Meal meal) {
-        return meal.getUserId() == SecurityUtil.authUserId();
+        if (meal.getUserId() == SecurityUtil.authUserId()) {
+            return true;
+        } else  {
+            throw new NotFoundException("User is not authenticated");
+        }
     }
 
     public Meal get(int id) {
