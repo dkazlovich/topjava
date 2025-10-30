@@ -27,45 +27,37 @@ public class MealService {
     }
 
     public Meal update(Meal meal) {
-        if (isAuthUser(meal)) {
-            return repository.save(meal);
-        }
-        return null;
+        isAuthUser(meal);
+        return repository.save(meal);
     }
 
     public boolean delete(int id) {
         Meal meal = repository.get(id);
-        if (isAuthUser(meal)) {
-            return repository.delete(id);
-        }
-        return false;
+        isAuthUser(meal);
+        return repository.delete(id);
     }
 
-    private static boolean isAuthUser(Meal meal) {
-        if (meal.getUserId() == SecurityUtil.authUserId()) {
-            return true;
-        } else  {
+    private static void isAuthUser(Meal meal) {
+        if (meal.getUserId() != SecurityUtil.authUserId()) {
             throw new NotFoundException("User is not authenticated");
         }
     }
 
     public Meal get(int id) {
         Meal meal = repository.get(id);
-        if (isAuthUser(meal)) {
-            return meal;
-        }
-        return null;
+        isAuthUser(meal);
+        return meal;
     }
 
     public Collection<Meal> getByDates(LocalDate start, LocalDate end) {
         return repository.getByDates(start, end).stream()
-                .filter(MealService::isAuthUser)
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
                 .collect(Collectors.toList());
     }
 
     public Collection<Meal> getAll() {
         return repository.getAll().stream()
-                .filter(MealService::isAuthUser)
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
                 .collect(Collectors.toList());
     }
 }
