@@ -26,7 +26,7 @@ public class MealService {
     }
 
     public Meal update(Meal meal) {
-        if (meal.getUserId() == SecurityUtil.authUserId()) {
+        if (isAuthUser(meal)) {
             return repository.save(meal);
         }
         return null;
@@ -34,15 +34,19 @@ public class MealService {
 
     public boolean delete(int id) {
         Meal meal = repository.get(id);
-        if (meal.getUserId() == SecurityUtil.authUserId()) {
+        if (isAuthUser(meal)) {
             return repository.delete(id);
         }
         return false;
     }
 
+    private static boolean isAuthUser(Meal meal) {
+        return meal.getUserId() == SecurityUtil.authUserId();
+    }
+
     public Meal get(int id) {
         Meal meal = repository.get(id);
-        if (meal.getUserId() == SecurityUtil.authUserId()) {
+        if (isAuthUser(meal)) {
             return meal;
         }
         return null;
@@ -50,13 +54,13 @@ public class MealService {
 
     public Collection<Meal> getByDates(LocalDate start, LocalDate end) {
         return repository.getByDates(start, end).stream()
-                .filter(meal -> meal.getUserId().equals(SecurityUtil.authUserId()))
+                .filter(MealService::isAuthUser)
                 .collect(Collectors.toList());
     }
 
     public Collection<Meal> getAll() {
         return repository.getAll().stream()
-                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .filter(MealService::isAuthUser)
                 .collect(Collectors.toList());
     }
 }
