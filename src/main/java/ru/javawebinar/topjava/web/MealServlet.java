@@ -72,28 +72,20 @@ public class MealServlet extends HttpServlet {
         switch (action == null ? "all" : action) {
 
             case "filter":
-                LocalDate fromDate;
-                LocalDate toDate;
-                LocalTime fromTime;
-                LocalTime toTime;
-                if (Objects.equals(request.getParameter("from-date"), "")) {
-                    fromDate = LocalDate.MIN;
-                } else {
+                LocalDate fromDate = LocalDate.MIN;
+                LocalDate toDate = LocalDate.MAX;
+                LocalTime fromTime = LocalTime.MIN;
+                LocalTime toTime = LocalTime.MAX;
+                if (!Objects.equals(request.getParameter("from-date"), "")) {
                     fromDate = LocalDate.parse(request.getParameter("from-date"));
                 }
-                if (Objects.equals(request.getParameter("to-date"), "")) {
-                    toDate = LocalDate.MAX;
-                } else {
+                if (!Objects.equals(request.getParameter("to-date"), "")) {
                     toDate = LocalDate.parse(request.getParameter("to-date"));
                 }
-                if (Objects.equals(request.getParameter("from-time"), "")) {
-                    fromTime = LocalTime.MIN;
-                } else {
+                if (!Objects.equals(request.getParameter("from-time"), "")) {
                     fromTime = LocalTime.parse(request.getParameter("from-time"));
                 }
-                if (Objects.equals(request.getParameter("to-time"), "")) {
-                    toTime = LocalTime.MAX;
-                } else {
+                if (!Objects.equals(request.getParameter("to-time"), "")) {
                     toTime = LocalTime.parse(request.getParameter("to-time"));
                 }
                 Collection<Meal> mealsByDate = mealController.getByDates(fromDate, toDate);
