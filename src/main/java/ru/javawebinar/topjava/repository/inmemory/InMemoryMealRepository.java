@@ -7,7 +7,9 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,6 +56,14 @@ public class InMemoryMealRepository implements MealRepository {
     public Collection<Meal> getByDates(LocalDate start, LocalDate end) {
         return mealsMap.values().stream()
                 .filter(meal -> !meal.getDate().isBefore(start) && !meal.getDate().isAfter(end))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Meal> getByTime(LocalTime start, LocalTime end) {
+        return mealsMap.values().stream()
+                .filter(meal -> !meal.getTime().isBefore(start) && !meal.getTime().isAfter(end))
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }

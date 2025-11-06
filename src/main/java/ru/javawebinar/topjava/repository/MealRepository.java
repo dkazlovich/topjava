@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 
 // TODO add userId
@@ -23,4 +24,6 @@ public interface MealRepository {
     Collection<Meal> getAll();
 
     Collection<Meal> getByDates(LocalDate start, LocalDate end);
+
+    Collection<Meal> getByTime(LocalTime start, LocalTime end);
 }

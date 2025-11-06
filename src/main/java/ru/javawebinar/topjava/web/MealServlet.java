@@ -7,6 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
@@ -17,9 +18,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 @WebServlet()
@@ -66,6 +70,37 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         switch (action == null ? "all" : action) {
+
+            case "filter":
+                LocalDate fromDate;
+                LocalDate toDate;
+                LocalTime fromTime;
+                LocalTime toTime;
+                if (Objects.equals(request.getParameter("from-date"), "")) {
+                    fromDate = LocalDate.MIN;
+                } else {
+                    fromDate = LocalDate.parse(request.getParameter("from-date"));
+                }
+                if (Objects.equals(request.getParameter("to-date"), "")) {
+                    toDate = LocalDate.MAX;
+                } else {
+                    toDate = LocalDate.parse(request.getParameter("to-date"));
+                }
+                if (Objects.equals(request.getParameter("from-time"), "")) {
+                    fromTime = LocalTime.MIN;
+                } else {
+                    fromTime = LocalTime.parse(request.getParameter("from-time"));
+                }
+                if (Objects.equals(request.getParameter("to-time"), "")) {
+                    toTime = LocalTime.MAX;
+                } else {
+                    toTime = LocalTime.parse(request.getParameter("to-time"));
+                }
+                Collection<Meal> mealsByDate = mealController.getByDates(fromDate, toDate);
+                Collection<MealTo> filteredMeals = MealsUtil.getFilteredTos(mealsByDate, MealsUtil.DEFAULT_CALORIES_PER_DAY, fromTime, toTime);
+                request.setAttribute("meals", filteredMeals);
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
             case "delete":
                 int id = getId(request);
                 log.info("Delete id={}", id);

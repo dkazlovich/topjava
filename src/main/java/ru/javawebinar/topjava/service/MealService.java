@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,12 @@ public class MealService {
 
     public Collection<Meal> getByDates(LocalDate start, LocalDate end) {
         return repository.getByDates(start, end).stream()
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Meal> getByTime(LocalTime start, LocalTime end) {
+        return repository.getByTime(start, end).stream()
                 .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
                 .collect(Collectors.toList());
     }
