@@ -86,24 +86,24 @@
         <div class="date-group">
             <div>
                 <label for="start-date">From date (inclusive)</label>
-                <input type="date" name="from-date">
+                <input type="date" name="from-date" value="<%= request.getParameter("from-date") != null ? request.getParameter("from-date") : "" %>">
             </div>
 
             <div>
                 <label for="end-date">To date (inclusive)</label>
-                <input type="date" name="to-date">
+                <input type="date" name="to-date" value="<%= request.getParameter("to-date") != null ? request.getParameter("to-date") : "" %>">
             </div>
         </div>
 
         <div class="time-group">
             <div>
                 <label for="start-time">From time (inclusive)</label>
-                <input type="time" name="from-time">
+                <input type="time" name="from-time" value="<%= request.getParameter("from-time") != null ? request.getParameter("from-time") : "" %>">
             </div>
 
             <div>
                 <label for="end-time">To time (exclusive)</label>
-                <input type="time" name="to-time">
+                <input type="time" name="to-time" value="<%= request.getParameter("to-time") != null ? request.getParameter("to-time") : "" %>">
             </div>
         </div>
 
