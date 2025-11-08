@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.User;
 

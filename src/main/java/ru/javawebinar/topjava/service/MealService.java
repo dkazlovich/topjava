@@ -1,9 +1,71 @@
 package ru.javawebinar.topjava.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+@Service
 public class MealService {
 
-    private MealRepository repository;
+    private final MealRepository repository;
 
+    @Autowired
+    public MealService(@Qualifier("inMemoryMealRepository") MealRepository repository) {
+        this.repository = repository;
+    }
+
+    public Meal create(Meal meal) {
+        meal.setUserId(SecurityUtil.authUserId());
+        return repository.save(meal);
+    }
+
+    public Meal update(Meal meal) {
+        isAuthUser(meal);
+        return repository.save(meal);
+    }
+
+    public boolean delete(int id) {
+        Meal meal = repository.get(id);
+        isAuthUser(meal);
+        return repository.delete(id);
+    }
+
+    private static void isAuthUser(Meal meal) {
+        if (meal.getUserId() != SecurityUtil.authUserId()) {
+            throw new NotFoundException("User is not authenticated");
+        }
+    }
+
+    public Meal get(int id) {
+        Meal meal = repository.get(id);
+        isAuthUser(meal);
+        return meal;
+    }
+
+    public Collection<Meal> getByDates(LocalDate start, LocalDate end) {
+        return repository.getByDates(start, end).stream()
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Meal> getByTime(LocalTime start, LocalTime end) {
+        return repository.getByTime(start, end).stream()
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Meal> getAll() {
+        return repository.getAll().stream()
+                .filter(meal -> meal.getUserId() == SecurityUtil.authUserId())
+                .collect(Collectors.toList());
+    }
 }
