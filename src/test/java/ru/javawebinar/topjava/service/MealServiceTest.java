@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -21,7 +20,7 @@ import static org.junit.Assert.*;
 import static ru.javawebinar.topjava.MealTestData.*;
 
 @ContextConfiguration({
-        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-app-jdbc.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
