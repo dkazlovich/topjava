@@ -60,6 +60,11 @@ public class JdbcMealRepository implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE id=? AND userid=?", ROW_MAPPER, id, userId);
+        List<Meal> meals2 = jdbcTemplate.query("SELECT * FROM meals WHERE id=? AND userid=?", ROW_MAPPER, id, userId);
+        Meal meal = DataAccessUtils.singleResult(meals);
+        Meal meal2 = DataAccessUtils.singleResult(meals2);
+        boolean b = meal == meal2;
+        meal.equals(meal2);
         return DataAccessUtils.singleResult(meals);
     }
 
