@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.User;
 import java.util.List;
 
 @Controller
+//@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AdminRestController extends AbstractUserController {
 
     @Override
