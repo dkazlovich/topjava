@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -44,8 +43,6 @@ public class JpaMealRepository implements MealRepository {
             return false;
         } else {
             em.remove(em.find(Meal.class, id));
-            em.flush();
-            em.clear();
             return true;
         }
     }
@@ -64,9 +61,9 @@ public class JpaMealRepository implements MealRepository {
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN, Meal.class)
-                .setParameter(1, userId)
-                .setParameter(2, startDateTime)
-                .setParameter(3, endDateTime)
+                .setParameter("userId", userId)
+                .setParameter("startDateTime", startDateTime)
+                .setParameter("endDateTime", endDateTime)
                 .getResultList();
     }
 }
