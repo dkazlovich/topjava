@@ -26,7 +26,7 @@ public class JpaMealRepository implements MealRepository {
         newMeal.setDescription(meal.getDescription());
         newMeal.setCalories(meal.getCalories());
         newMeal.setDateTime(meal.getDateTime());
-        newMeal.setUser(em.find(User.class, userId));
+        newMeal.setUser(em.getReference(User.class, userId));
         if (meal.isNew()) {
             em.persist(newMeal);
         } else {
@@ -55,6 +55,7 @@ public class JpaMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         return em.createNamedQuery(Meal.ALL,Meal.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 

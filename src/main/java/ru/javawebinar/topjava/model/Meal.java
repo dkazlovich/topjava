@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        @NamedQuery(name = Meal.ALL, query = "SELECT m FROM Meal m"),
+        @NamedQuery(name = Meal.ALL, query = "SELECT m FROM Meal m JOIN FETCH m.user WHERE m.user.id=:userId"),
         @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime >=:startDateTime AND m.dateTime <:endDateTime ORDER BY m.dateTime DESC"),
 })
 @Entity
