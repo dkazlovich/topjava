@@ -1,30 +1,16 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@NamedQueries({
-        @NamedQuery(name = Meal.ALL, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
-        @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime >=:startDateTime AND m.dateTime <:endDateTime ORDER BY m.dateTime DESC"),
-})
-@Entity
-@Table(name = "meal")
 public class Meal extends AbstractBaseEntity {
-
-    public static final String ALL = "Meal.All";
-    public static final String BETWEEN_HALF_OPEN = "Meal.BetweenHalfOpen";
-
-    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    @NotBlank
     private String description;
 
-    @Positive
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
