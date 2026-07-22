@@ -4,9 +4,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfDayOrMin;
@@ -35,6 +40,12 @@ public class MealService {
     }
 
     public List<Meal> getAll(int userId) {
+//        Meal m1 = new Meal();
+//        m1.setId(1);
+//        m1.setUser(new User(1,"user", "g435er@mail.com", "password"));
+//        m1.setDescription("123");
+//        m1.setDateTime(LocalDateTime.now());
+//        return Collections.singletonList(m1);
         return repository.getAll(userId);
     }
 
