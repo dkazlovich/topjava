@@ -45,7 +45,7 @@ public class JpaMealRepository implements MealRepository {
         if (meal == null || meal.getUser().getId() != userId) {
             return false;
         } else {
-            em.remove(em.find(Meal.class, id));
+            em.remove(meal);
             return true;
         }
     }
@@ -56,7 +56,7 @@ public class JpaMealRepository implements MealRepository {
         if (meal == null || meal.getUser().getId() != userId) {
             return null;
         } else {
-        return em.find(Meal.class, id);
+        return meal;
         }
     }
 
